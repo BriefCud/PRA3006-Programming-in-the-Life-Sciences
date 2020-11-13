@@ -1,46 +1,62 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Example</title>
+        <title>Final Project</title>
         <!-- Initialize a global WBK function -->
         <script src="https://cdn.rawgit.com/maxlath/wikidata-sdk/dist/dist/wikibase-sdk.min.js"></script>
         <!-- Initialize a global wdk object using the WBK object -->
         <script src="https://cdn.rawgit.com/maxlath/wikidata-sdk/dist/dist/wikidata-sdk.min.js"></script>
-        <script>
-            const wbk_bio = new WBK({
-                instance: 'http://bio2rdf.org',
-                sparqlEndpoint: 'http://bio2rdf.org/sparql'
-            });
-            
-            const wbk_wiki = new WBK({
-                instance: 'https://query.wikidata.org',
-                sparqlEndpoint: 'https://query.wikidata.org/#'
-            });
-        </script>
+        <script src="myscript.js"></script>
     </head>
     
     <body>
+        <form id="form">
+            <select name="Patient Condition">
+                <option value="pain" selected>Pain</option>
+            </select>
+            <select name="Drug in Patients Blood">
+                <option value="cocaine" selected>Cocaine</option>
+            </select>
+        </form>
         <pre id="output"></pre>
         <script>
-        
-            query_bio = "PREFIX kegg_vocabulary: <http://bio2rdf.org/kegg_vocabulary:> SELECT ?pathway ?drug WHERE { <http://bio2rdf.org/kegg:C07163> kegg_vocabulary:pathway ?pathway. ?drug kegg_vocabulary:pathway ?pathway }";
-            
-            query_wiki = "SELECT ?drug ?drugLabel ?keggid WHERE{ ?drug wdt:P2175 wd:Q81938  . ?drug wdt:P665 ?keggid . SERVICE wikibase:label {bd:serviceParam wikibase:language '[AUTO_LANGUAGE]' . }} LIMIT 10";
-            
-            fetch(wdk.sparqlQuery(query_wiki)
-                 ).then( response => response.json()
-                       ).then( wdk.simplify.sparqlResults
-                             ).then(function (response) {
-                document.getElementById('output').innerHTML=JSON.stringify(response, undefined, 2);
-            });
-            
-            fetch(wbk_bio.sparqlQuery(query_bio)
-                 ).then(response => response.json()
-                       ).then(wdk.simplify.sparqlResults
-                             ).then(function(response) {
-                document.getElementById('output').innerHTML = JSON.stringify(response, undefined,2);
-            });
+            function GetQueryData(query1) {
+                var responseJ1;
+                var responseJ2;
+
+                fetch(wdk.sparqlQuery(query1)
+                     ).then( response => response.json()
+                           ).then( wdk.simplify.sparqlResults
+                                 ).then(function (response) {
+                    responseJ1 = JSON.stringify(response, undefined, 2);
+                    document.getElementById("output").innerHTML = responseJ1;
+                    
+                    var keggId = response;
+                    var keggValues = "";
+                    for (i=0;i<keggId.length;i++) {
+                        keggValues += "<http://bio2rdf.org/kegg:"+keggId[i].keggid+"> ";
+                    }
+                    console.log(keggValues);
+                    
+                    query2 = `PREFIX kegg_vocabulary: <http://bio2rdf.org/kegg_vocabulary:>
+SELECT ?pathway ?drug ?keggid
+WHERE {
+VALUES ?keggid {`+keggValues+`}
+?keggid kegg_vocabulary:pathway ?pathway . 
+?drug kegg_vocabulary:pathway ?pathway 
+}`
+                    
+                        fetch(wdk.sparqlQuery(query2)
+                         ).then( response => response.json()
+                               ).then( wdk.simplify.sparqlResults
+                                     ).then(function (response) {
+                        responseJ2 = JSON.stringify(response, undefined, 2);
+                        document.getElementById("output").innerHTML = responseJ2;
+                        });
+                }); 
+            }
+            var data = GetQueryData(query_wiki);
             
         </script>
-        </body>
+    </body>
 </html>
