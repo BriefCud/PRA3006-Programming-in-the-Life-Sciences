@@ -17,7 +17,13 @@ function GetQueryData(wbk_bio) {
                      ).then(function (response) {
         responseJ3 = JSON.stringify(response, undefined, 2);
         document.getElementById("output3").innerHTML = responseJ3;
-            
+        var response_drug = response;
+        var pathways_drug = "";
+        for (i =0 ; i<response_drug.length;i++) {
+            pathways_drug += response_drug[i].pathway;
+            //code
+        }
+        //console.log(pathways);
         fetch(wdk.sparqlQuery(query_wiki)
              ).then( response => response.json()
                    ).then( wdk.simplify.sparqlResults
@@ -27,8 +33,11 @@ function GetQueryData(wbk_bio) {
     
             var keggId = response;
             var keggValues = "";
+           
             for (i=0;i<keggId.length;i++) {
                 keggValues += "<http://bio2rdf.org/kegg:"+keggId[i].keggid+"> ";
+                
+                
             }
     //      console.log(keggValues);
     
@@ -40,6 +49,20 @@ function GetQueryData(wbk_bio) {
                          ).then(function (response) {
             responseJ2 = JSON.stringify(response, undefined, 2);
             document.getElementById("output2").innerHTML = responseJ2;
+            var response_bio = response;
+            var pathways_bio= "";
+            for (i =0 ; i<response_bio.length;i++) {
+                pathways_bio+= response_bio[i].pathway;
+                //code
+            }
+            for (i=0;i<pathways_bio.length;i++) {
+                if (pathways_bio[i] == pathways_drug[i]) {
+                    console.log('1');
+                    //code
+                }
+                //code
+            }
+                //code
             
        
             });
