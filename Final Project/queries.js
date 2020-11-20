@@ -60,17 +60,17 @@ function GetQueryData(wbk_bio) {
             for (i=0;i<pathways_bio.length;i++) {
                 
                 if (pathways_bio[i] == pathways_drug) {
-                    interact = pathways_bio[i];
+                    interact.push(response_bio[i].keggid);
                     //code
                 }
                 else{
-                    nointeract[i] = pathways_bio[i];
+                    nointeract.push(response_bio[i].keggid);
                 }
                 
                 //code
             }
                 //code
-            console.log(interact);
+            console.log(nointeract);
        
             });
         }); 
