@@ -18,45 +18,10 @@
                 <option value="cocaine" selected>Cocaine</option>
             </select>
         </form>
-        <pre id="output"></pre>
+        <pre id="output1"></pre>
+        <pre id="output2"></pre>
         <script>
-            function GetQueryData(query1) {
-                var responseJ1;
-                var responseJ2;
-
-                fetch(wdk.sparqlQuery(query1)
-                     ).then( response => response.json()
-                           ).then( wdk.simplify.sparqlResults
-                                 ).then(function (response) {
-                    responseJ1 = JSON.stringify(response, undefined, 2);
-                    document.getElementById("output").innerHTML = responseJ1;
-                    
-                    var keggId = response;
-                    var keggValues = "";
-                    for (i=0;i<keggId.length;i++) {
-                        keggValues += "<http://bio2rdf.org/kegg:"+keggId[i].keggid+"> ";
-                    }
-                    console.log(keggValues);
-                    
-                    query2 = `PREFIX kegg_vocabulary: <http://bio2rdf.org/kegg_vocabulary:>
-SELECT ?pathway ?drug ?keggid
-WHERE {
-VALUES ?keggid {`+keggValues+`}
-?keggid kegg_vocabulary:pathway ?pathway . 
-?drug kegg_vocabulary:pathway ?pathway 
-}`
-                    
-                        fetch(wdk.sparqlQuery(query2)
-                         ).then( response => response.json()
-                               ).then( wdk.simplify.sparqlResults
-                                     ).then(function (response) {
-                        responseJ2 = JSON.stringify(response, undefined, 2);
-                        document.getElementById("output").innerHTML = responseJ2;
-                        });
-                }); 
-            }
-            var data = GetQueryData(query_wiki);
-            
+            GetQueryData(wbk_bio);
         </script>
     </body>
 </html>
