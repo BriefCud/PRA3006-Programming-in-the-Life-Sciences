@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+      <meta charset="utf-8">
+        <title>Drug interactions</title>
+        <!-- Initialize a global WBK function -->
+        <script src="https://cdn.rawgit.com/maxlath/wikidata-sdk/dist/dist/wikibase-sdk.min.js"></script>
+        <!-- Initialize a global wdk object using the WBK object -->
+        <script src="https://cdn.rawgit.com/maxlath/wikidata-sdk/dist/dist/wikidata-sdk.min.js"></script>
+        <!-- Include the myscipt.js file in this html file -->
+        <script src="testscript.js"></script>
+    </head>
+
+    <body>
+      <div class="">
+        <h1>Wlecome</h1>
+        <p>The purpose of thisproject is to provide a simple service for medical personnel </p>
+      </div>
+
+      <div class="information">
+        <form id="patientInfo">
+          <select id="condition" name="Patient Condition">
+            <option value="Q81938" selected>Pain</option>
+            <option value="Q42844">Major Depressive Disorders</option>
+            <option value="Q544006">Anxiety Disorder</option>
+            <option value="Q190805">Heart Disease</option>
+            <option value="Q124407">Type 1 Diabetes</option>
+            <option value="Q3025883">Type 2 Diabetes</option>
+            <option value="Q12192">Pneumonia</option>
+          </select>
+
+          <select id="drug" name="Drug in Patients Blood">
+            <option value="D07286" selected>Heroin</option>
+            <option value="D00110">Cocaine</option>
+            <option value="D08187">Methamphetamine</option>
+            <option value="D08098">Ketamine</option>
+            <option value="D11172">MDMA</option>
+            <option value="D10915">Marijuana</option>
+            <option value="C07576">Psilocybin</option>
+            <option value="D00225">Xanax</option>
+          </select>
+        </form>
+      </div>
+        <pre id="output1"></pre>
+        <pre id="output2"></pre>
+        <pre id="output3"></pre>
+
+        <script>
+          var con = document.getElementById('condition');
+          var condition = con[con.selectedIndex].value;
+
+          var dru = document.getElementById('drug');
+          var drug = dru[dru.selectedIndex].value;
+
+          console.log(condition);
+          console.log(drug);
+
+          GetQueryData(wbk_bio,condition,drug)
+        </script>
+    </body>
+</html>
