@@ -3,76 +3,75 @@ var wbk_bio = new WBK({
     sparqlEndpoint: 'http://bio2rdf.org/sparql'
 });
 
-function GetQueryData(wbk_bio) {
-    var responseJ1;
-    var responseJ2;
-    var responseJ3;
-    var query_wiki = "SELECT ?drug ?drugLabel ?keggid WHERE{ ?drug wdt:P2175 wd:Q81938  . ?drug wdt:P665 ?keggid . SERVICE wikibase:label {bd:serviceParam wikibase:language '[AUTO_LANGUAGE]' . }} LIMIT 100";
-    
-    var query_drug = "PREFIX kegg_vocabulary: <http://bio2rdf.org/kegg_vocabulary:> PREFIX dcterms: <http://purl.org/dc/terms/>SELECT ?pathway ?keggid ?label_s WHERE { VALUES ?keggid {<http://bio2rdf.org/kegg:D07286>} ?keggid kegg_vocabulary:pathway ?pathway . ?keggid dcterms:title ?label .BIND (str(?label) as ?label_s)}";
-        
-    fetch(wbk_bio.sparqlQuery(query_drug)
-         ).then( response => response.json()
-               ).then( wdk.simplify.sparqlResults
-                     ).then(function (response) {
-        responseJ3 = JSON.stringify(response, undefined, 2);
-        document.getElementById("output3").innerHTML = responseJ3;
-        var response_drug = response;
-        var pathways_drug = "";
-     
-        pathways_drug = response_drug[0].pathway;
-            //code
-        
-        //console.log(pathways);
-        fetch(wdk.sparqlQuery(query_wiki)
-             ).then( response => response.json()
-                   ).then( wdk.simplify.sparqlResults
-                         ).then(function (response) {
-            responseJ1 = JSON.stringify(response, undefined, 2);
-            document.getElementById("output1").innerHTML = responseJ1;
-    
-            var keggId = response;
-            var keggValues = "";
-           
-            for (i=0;i<keggId.length;i++) {
-                keggValues += "<http://bio2rdf.org/kegg:"+keggId[i].keggid+"> ";
-             
-                
-            }
-    //      console.log(keggValues);
-    
-            var query_bio = "PREFIX kegg_vocabulary: <http://bio2rdf.org/kegg_vocabulary:> PREFIX dcterms: <http://purl.org/dc/terms/>SELECT ?pathway ?keggid ?label_s WHERE { VALUES ?keggid {"+keggValues+"} ?keggid kegg_vocabulary:pathway ?pathway . ?keggid dcterms:title ?label .BIND (str(?label) as ?label_s)}";
-    
-            fetch(wbk_bio.sparqlQuery(query_bio)
-             ).then( response => response.json()
-                   ).then( wdk.simplify.sparqlResults
-                         ).then(function (response) {
-            responseJ2 = JSON.stringify(response, undefined, 2);
-            document.getElementById("output2").innerHTML = responseJ2;
-            var response_bio = response;
-            var pathways_bio= [];
-            for (i =0 ; i<response_bio.length;i++) {
-                pathways_bio[i]= response_bio[i].pathway;
-                //code
-            }
-            var interact = [];
-            var nointeract =[];
-            for (i=0;i<pathways_bio.length;i++) {
-                
-                if (pathways_bio[i] == pathways_drug) {
-                    interact.push(response_bio[i].label_s);
-                    //code
-                }
-                else{
-                    nointeract.push(response_bio[i].label_s);
-                }
-                
-                //code
-            }
-                //code
-            console.log(interact);
-       
-            });
-        }); 
-});
+async function GetData(wbk_bio,condition,drug) {
+/*
+ * Desciption of GetData() function *
+
+
+*/
+  //Declaring Variables
+  var pathways_bio= [];
+  var interact = [];
+  var noInteract =[];
+  var data = [];
+  var drugData = await DrugQuery(wbk_bio,drug);
+  var conditionData = await ConditionQuery(wdk,condition);
+  var pathwayData = await PathwaysQuery(wbk_bio,conditionData);
+
+  for (i=0;i<pathwayData.length;i++) {
+    if (pathwayData[i].pathway == drugData[0].pathway) {
+      interact.push({"pathway":pathwayData[i].label_s,"id":pathwayData[i].keggid});
+    }
+    else{
+      noInteract.push({"pathway":pathwayData[i].label_s});
+    }
+    data.push(pathwayData[i]);
+  }
+  data.push(drugData[0]);
+  return data;
+}
+
+async function FetchQuery(wk,query) {
+  url = wk.sparqlQuery(query);
+  let response = await fetch(url);
+  var json = await response.json();
+  json = wdk.simplify.sparqlResults(json);
+  return json;
+}
+
+async function DrugQuery(wbk_bio,drug) {
+  var query = "PREFIX kegg_vocabulary: <http://bio2rdf.org/kegg_vocabulary:> PREFIX dcterms: <http://purl.org/dc/terms/>SELECT ?pathway ?keggid ?label_s ?label_p WHERE { VALUES ?keggid {<http://bio2rdf.org/kegg:"+drug+">} ?keggid kegg_vocabulary:pathway ?pathway . ?pathway dcterms:title ?label1 . ?keggid dcterms:title ?label .BIND (str(?label) as ?label_s) .BIND (str(?label1) as ?label_p)}";
+
+  try {
+    var response = await FetchQuery(wbk_bio,query);
+    return response;
+  } catch(error) {
+    alert(error);
+  }
+}
+
+async function ConditionQuery(wbk_bio,condition) {
+  var query = "SELECT ?drug ?drugLabel ?keggid WHERE{ ?drug wdt:P2175 wd:"+condition+"  . ?drug wdt:P665 ?keggid . SERVICE wikibase:label {bd:serviceParam wikibase:language '[AUTO_LANGUAGE]' . }} LIMIT 100";
+
+  try{
+    var response = await FetchQuery(wdk,query);
+    var keggUrls = "";
+    for (i=0;i<response.length;i++) {
+        keggUrls += "<http://bio2rdf.org/kegg:"+response[i].keggid+"> ";
+    }
+    return keggUrls;
+  } catch(error) {
+    alert(error);
+  }
+}
+
+async function PathwaysQuery(wbk_bio,keggUrls) {
+  var query = "PREFIX kegg_vocabulary: <http://bio2rdf.org/kegg_vocabulary:> PREFIX dcterms: <http://purl.org/dc/terms/>SELECT ?pathway ?keggid ?label_s ?label_p WHERE { VALUES ?keggid {"+keggUrls+"} ?keggid kegg_vocabulary:pathway ?pathway . ?pathway dcterms:title ?label1 . ?keggid dcterms:title ?label  .BIND (str(?label) as ?label_s) . BIND (str(?label1) as ?label_p)}";
+
+  try {
+    var response = await FetchQuery(wbk_bio,query);
+    return response;
+  } catch(error) {
+    alert(error);
+  }
 }
