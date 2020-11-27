@@ -4,6 +4,8 @@ var wbk_bio = new WBK({
 });
 
 
+
+
 async function GetData(wbk_bio,condition,drug) {
 /*
  * Desciption of GetData() function *
@@ -14,21 +16,26 @@ async function GetData(wbk_bio,condition,drug) {
   var pathways_bio= [];
   var interact = [];
   var noInteract =[];
-  var data = {};
+  var data = [];
   var drugData = await DrugQuery(wbk_bio,drug);
   var conditionData = await ConditionQuery(wdk,condition);
   var pathwayData = await PathwaysQuery(wbk_bio,conditionData);
 
+  
+  
+  
   for (i=0;i<pathwayData.length;i++) {
-
+    
     if (pathwayData[i].pathway == drugData[0].pathway) {
-        interact.push(pathwayData[i].label_s);
+        interact.push({"pathway":pathwayData[i].label_s,"id":pathwayData[i].keggid});
     }
     else{
         noInteract.push(pathwayData[i].label_s);
     }
+    data.push(pathwayData[i]);
   }
-  data = {i:interact, n:noInteract};
+  data.push(drugData[0])
+  
   return data;
 }
 
