@@ -31,27 +31,21 @@ async function GetData(wbk_bio,condition,drug) {
 
   for (i=0;i<pathwayData.length;i++) {
     for (j = 0;j<drugData.length;j++) {
-            if (pathwayData[i].pathway == drugData[j].pathway) {//check if response from bio2rdf pathway for medication matches the pathway from the initial bio2rdf illicit drug query
-            interact.push(pathwayData[i]);//if yes push it to an interact array
+      if (pathwayData[i].pathway == drugData[j].pathway) {//check if response from bio2rdf pathway for medication matches the pathway from the initial bio2rdf illicit drug query
+      interact.push(pathwayData[i]);//if yes push it to an interact array
+    }else{
+      noInteract.push(pathwayData[i]);//else push to an array of non-interaction
     }
-        else{
-      noInteract.push({"pathway":pathwayData[i].label_s});//else push to an array of non-interaction
     }
-    }
-
-
-
-    
   }
-  
+
   for (i=0;i<interact.length;i++) {
     data.push(interact[i]);//push interact json to return of function first
   }
   for (i=0;i<drugData.length;i++) {
     data.push(drugData[i]);//push illicit drug query last, so we know that illicit drugs will be at the end of the data json
   }
- 
-  return data;
+  return {"data":data,"noI":noInteract};
 }
 /**
  *this function simplifies the data from the server response into a json
@@ -92,7 +86,7 @@ async function DrugQuery(wbk_bio,drug) {//does the query for the illicit drug wi
  */
 async function ConditionQuery(wbk_bio,condition) {
   //when called conditionQuery does a query of the selected condition, getting all the medication from wikidata that is used to treat that condition
-  var query = "SELECT ?drug ?drugLabel ?keggid WHERE{ ?drug wdt:P2175 wd:"+condition+"  . ?drug wdt:P665 ?keggid . SERVICE wikibase:label {bd:serviceParam wikibase:language '[AUTO_LANGUAGE]' . }} LIMIT 100";//limit 100 due to server timeout 
+  var query = "SELECT ?drug ?drugLabel ?keggid WHERE{ ?drug wdt:P2175 wd:"+condition+"  . ?drug wdt:P665 ?keggid . SERVICE wikibase:label {bd:serviceParam wikibase:language '[AUTO_LANGUAGE]' . }} LIMIT 100";//limit 100 due to server timeout
 
   try{
     var response = await FetchQuery(wdk,query);
