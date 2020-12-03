@@ -1,3 +1,9 @@
+/**
+ *Draws a force directed network graph
+ *inputs dataset - The array that should be passed to visualize the data
+ *returns void - No return, this only appends the network graph to the SVG
+ */
+
 function DrawNetwork(dataset) {
   var margin = {top: 10, right: 30, bottom: 30, left: 40},
     width = 1280 - margin.left - margin.right,
@@ -84,3 +90,4 @@ function dragended(d) {
   d.fy = null;
 }  
 }
+

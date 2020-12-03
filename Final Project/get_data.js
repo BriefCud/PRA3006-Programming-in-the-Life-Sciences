@@ -1,3 +1,12 @@
+/**
+ *Updates data based on selected condition and drug from dropdown on HTML, calls DrawNetwork with dataset specified
+ *input wbk_bio - use wbk_bio as input every time, tells function to use bio2rdf sql endpoint
+ *input condition - takes selected condition from html dropdown and uses it to do the queries
+ *input drug - takes selected illicit drug from html dropdown and uses it to do the queries
+ *return void - this function returns void, its purpose is to draw the networkgraph with data we specify
+ */
+
+
 function UpdateData(wbk_bio,condition,drug) {
   //this function updates the data that is passed to the network graph to be drawn
   GetData(wbk_bio,condition,drug).then(
