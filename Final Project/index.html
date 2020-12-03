@@ -14,7 +14,7 @@
         <script src="draw_network.js"></script>
         <script src="get_data.js"></script>
     </head>
-
+    
     <body>
       <div class="">
         <h1>Wlecome</h1>
@@ -47,6 +47,21 @@
         <button id="searchButton" type="button" name="button">Search</button>
       </div>
       <div id="network">
+            <style>
+        .links line{
+    stroke: #999;
+    stroke-opacity: 0.6;}
+    .nodes circle {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+
+text {
+  font-family: sans-serif;
+  font-size: 10px;
+}
+    </style>
+    <svg width="1280" height="720"></svg>
         <script>
           document.getElementById('searchButton').onclick = function(){
             d3.select("svg").remove();

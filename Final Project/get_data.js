@@ -17,6 +17,7 @@ function UpdateData(wbk_bio,condition,drug) {
             return {"source": dataset[max].keggid, "target": dataset[max].keggid};
           }
         });
+      console.log(data);
         DrawNetwork(data);
     },
     function(error){console.log(error);}

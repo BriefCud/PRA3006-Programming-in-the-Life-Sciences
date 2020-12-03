@@ -20,14 +20,22 @@ async function GetData(wbk_bio,condition,drug) {
 
   for (i=0;i<pathwayData.length;i++) {
     if (pathwayData[i].pathway == drugData[0].pathway) {
-      interact.push({"pathway":pathwayData[i].label_s,"id":pathwayData[i].keggid});
+      interact.push(pathwayData[i]);
     }
+
     else{
       noInteract.push({"pathway":pathwayData[i].label_s});
     }
-    data.push(pathwayData[i]);
+    
   }
-  data.push(drugData[0]);
+  
+  for (i=0;i<interact.length;i++) {
+    data.push(interact[i]);
+  }
+  for (i=0;i<drugData.length;i++) {
+    data.push(drugData[i]);
+  }
+ 
   return data;
 }
 
