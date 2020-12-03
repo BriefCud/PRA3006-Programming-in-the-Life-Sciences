@@ -17,12 +17,13 @@
     
     <body>
       <div class="">
-        <h1>Wlecome</h1>
-        <p>The purpose of thisproject is to provide a simple service for medical personnel </p>
+        <h1>Welcome</h1>
+        <p>The purpose of this website is to provide a simple service for medical personnel </p>
       </div>
 
       <div class="information">
-        <form id="patientInfo">
+        <!--each option is assigned an internal value corresponding either to the wikidata identifier for the condition, or the keggid of the drug that we want to query on bio2rdf-->
+        <form id="patientInfo"><!-- this creates the dropdown to select the condition we want to treat-->
           <select id="condition" name="Patient Condition">
             <option value="Q81938">Pain</option>
             <option value="Q42844">Major Depressive Disorders</option>
@@ -33,7 +34,7 @@
             <option value="Q12192">Pneumonia</option>
           </select>
 
-          <select id="drug" name="Drug in Patients Blood">
+          <select id="drug" name="Drug in Patients Blood"><!--this creates the dropdown to select the illicit drug that we are worried may cause interaction with prescribed medication-->
             <option value="D07286">Heroin</option>
             <option value="D00110">Cocaine</option>
             <option value="D08187">Methamphetamine</option>
@@ -47,6 +48,7 @@
         <button id="searchButton" type="button" name="button">Search</button>
       </div>
       <div id="network">
+        <!-- styling of the svg elements-->
             <style>
         .links line{
     stroke: #999;
@@ -61,17 +63,18 @@ text {
   font-size: 10px;
 }
     </style>
+            <!--put a blank svg on the html page within the body which we then append our network graph to-->
     <svg width="1280" height="720"></svg>
         <script>
-          document.getElementById('searchButton').onclick = function(){
-            d3.select("svg").remove();
-            var con = document.getElementById('condition');
+          document.getElementById('searchButton').onclick = function(){//on click of the search button
+            d3.select("svg").remove();//if there is a previously drawn svg, remove it
+            var con = document.getElementById('condition');//get the condition selected from the dropdown
             var condition = con[con.selectedIndex].value;
 
-            var dru = document.getElementById('drug');
+            var dru = document.getElementById('drug');//get the drug selected from the dropdown
             var drug = dru[dru.selectedIndex].value;
 
-            UpdateData(wbk_bio,condition,drug);
+            UpdateData(wbk_bio,condition,drug);//call the updateData function to perform the new queries with the selected options from the dropdown
           }
         </script>
       </div>
