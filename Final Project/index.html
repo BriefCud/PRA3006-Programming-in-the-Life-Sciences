@@ -8,22 +8,21 @@
         <!-- Initialize a global wdk object using the WBK object -->
         <script src="https://cdn.rawgit.com/maxlath/wikidata-sdk/dist/dist/wikidata-sdk.min.js"></script>
         <!-- Include the scipt.js file in this html file -->
-        <script src="queries.js"></script>
+        <script src="queries_old.js"></script>
         <!-- Include the d3.js in order to perform data visulaisation -->
         <script src="https://d3js.org/d3.v4.min.js"></script>
         <script src="draw_network.js"></script>
-        <script src="get_data.js"></script>
+        <script src="get_data_old.js"></script>
     </head>
-    
+
     <body>
       <div class="">
-        <h1>Welcome</h1>
-        <p>The purpose of this website is to provide a simple service for medical personnel </p>
+        <h1>Wlecome</h1>
+        <p>The first dropdown menu is the condition the patient is suffering from, and the second is the type of drug in their system. When these are selected press the search button in order to display a network graph of the perscription drugs that might interact with the illegal drug in the patients blood.</p>
       </div>
 
       <div class="information">
-        <!--each option is assigned an internal value corresponding either to the wikidata identifier for the condition, or the keggid of the drug that we want to query on bio2rdf-->
-        <form id="patientInfo"><!-- this creates the dropdown to select the condition we want to treat-->
+        <form id="patientInfo">
           <select id="condition" name="Patient Condition">
             <option value="Q81938">Pain</option>
             <option value="Q42844">Major Depressive Disorders</option>
@@ -34,7 +33,7 @@
             <option value="Q12192">Pneumonia</option>
           </select>
 
-          <select id="drug" name="Drug in Patients Blood"><!--this creates the dropdown to select the illicit drug that we are worried may cause interaction with prescribed medication-->
+          <select id="drug" name="Drug in Patients Blood">
             <option value="D07286">Heroin</option>
             <option value="D00110">Cocaine</option>
             <option value="D08187">Methamphetamine</option>
@@ -47,36 +46,19 @@
         </form>
         <button id="searchButton" type="button" name="button">Search</button>
       </div>
-      <div id="network">
-        <!-- styling of the svg elements-->
-            <style>
-        .links line{
-    stroke: #999;
-    stroke-opacity: 0.6;}
-    .nodes circle {
-  stroke: #fff;
-  stroke-width: 1.5px;
-}
+      <div id="network"></div>
+      <div id="table"></div>
+      <script>
+        document.getElementById('searchButton').onclick = function(){
+          d3.select("svg").remove();
+          var c = document.getElementById('condition');
+          var condition = c[c.selectedIndex].value;
 
-text {
-  font-family: sans-serif;
-  font-size: 10px;
-}
-    </style>
-            <!--put a blank svg on the html page within the body which we then append our network graph to-->
-    <svg width="1280" height="720"></svg>
-        <script>
-          document.getElementById('searchButton').onclick = function(){//on click of the search button
-            d3.select("svg").remove();//if there is a previously drawn svg, remove it
-            var con = document.getElementById('condition');//get the condition selected from the dropdown
-            var condition = con[con.selectedIndex].value;
+          var d = document.getElementById('drug');
+          var drug = d[d.selectedIndex].value;
 
-            var dru = document.getElementById('drug');//get the drug selected from the dropdown
-            var drug = dru[dru.selectedIndex].value;
-
-            UpdateData(wbk_bio,condition,drug);//call the updateData function to perform the new queries with the selected options from the dropdown
-          }
-        </script>
-      </div>
+          UpdateData(wbk_bio,condition,drug);
+        }
+      </script>
     </body>
 </html>
