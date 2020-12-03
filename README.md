@@ -5,8 +5,12 @@ When a patient presents themselves and requires care for a condition, care must 
 between prescribed medication and any other substances the patient may be taking.
 Our goal was to solve this problem by querying drug pathways and showing which drugs possibly interact based on their pathway,
 creating a visualized network of interacting drugs and presenting a table of drugs which should be safe to prescribed, as they act on a different pathway
+
+
+
 ***THIS WAS NOT MADE BY HEALTHCARE OR PHARMACOLOGY PROFESSIONALS, PLEASE DO NOT TAKE THE RESULTS OF THIS PROJECT AS ANYTHING MORE THAN A PROOF OF CONCEPT
 ALWAYS CONSULT YOUR REAL DOCTOR IF YOU HAVE ANY CONCERNS ABOUT YOUR MEDICATION***
+
 
 In short, this code is relativley simple to understand and run, download the contents of the Final Project directory onto your machine within a single folder, and
 open index.html, where you will be greeted with a short message explaining the purpose of this project, and a dropdown menu.
