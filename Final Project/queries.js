@@ -2,7 +2,14 @@ var wbk_bio = new WBK({ //declare sparql endpoint, we dont need to declare for w
     instance: 'http://bio2rdf.org',
     sparqlEndpoint: 'http://bio2rdf.org/sparql'
 });
-
+/**
+ *Helper function to return an array of unique elements in array sorted by their key
+ *input arr - array to remove duplicate entries from
+ *input key - key to check for duplicates
+ */
+function getUniqueListBy(arr, key) { 
+    return [...new Map(arr.map(item => [item[key], item])).values()]
+}
 
 /**
  *This function does all the SparQL queries with the specified condition and drug from html dropdown
@@ -45,6 +52,10 @@ async function GetData(wbk_bio,condition,drug) {
   for (i=0;i<drugData.length;i++) {
     data.push(drugData[i]);//push illicit drug query last, so we know that illicit drugs will be at the end of the data json
   }
+  
+  noInteract = getUniqueListBy(noInteract,'label_s');
+
+    
   return {"data":data,"noI":noInteract};
 }
 /**
@@ -71,7 +82,7 @@ async function DrugQuery(wbk_bio,drug) {//does the query for the illicit drug wi
   var query = "PREFIX kegg_vocabulary: <http://bio2rdf.org/kegg_vocabulary:> PREFIX dcterms: <http://purl.org/dc/terms/>SELECT ?pathway ?keggid ?label_s ?label_p WHERE { VALUES ?keggid {<http://bio2rdf.org/kegg:"+drug+">} ?keggid kegg_vocabulary:pathway ?pathway . ?pathway dcterms:title ?label1 . ?keggid dcterms:title ?label .BIND (str(?label) as ?label_s) .BIND (str(?label1) as ?label_p)}";
 
   try {
-    var response = await FetchQuery(wbk_bio,query); //awaits for response from the fetcchQuery function for the drug query, assigning it to a response variable which is a json of the return of the sparql query
+    var response = await FetchQuery(wbk_bio,query);//awaits for response from the fetcchQuery function for the drug query, assigning it to a response variable which is a json of the return of the sparql query
     return response;
   } catch(error) {
     alert(error);

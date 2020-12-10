@@ -4,13 +4,13 @@
       <meta charset="utf-8">
         <title>Drug interactions</title>
         <!-- Initialize a global WBK function -->
-        <script src="https://cdn.rawgit.com/maxlath/wikidata-sdk/dist/dist/wikibase-sdk.min.js"></script>
+        <script src="http://cdn.rawgit.com/maxlath/wikidata-sdk/dist/dist/wikibase-sdk.min.js"></script>
         <!-- Initialize a global wdk object using the WBK object -->
-        <script src="https://cdn.rawgit.com/maxlath/wikidata-sdk/dist/dist/wikidata-sdk.min.js"></script>
+        <script src="http://cdn.rawgit.com/maxlath/wikidata-sdk/dist/dist/wikidata-sdk.min.js"></script>
         <!-- Include the scipt.js file in this html file -->
         <script src="queries.js"></script>
         <!-- Include the d3.js in order to perform data visulaisation -->
-        <script src="https://d3js.org/d3.v4.min.js"></script>
+        <script src="http://d3js.org/d3.v4.min.js"></script>
         <script src="draw_network.js"></script>
         <script src="get_data.js"></script>
     </head>
@@ -51,6 +51,7 @@
       <script>
         document.getElementById('searchButton').onclick = function(){
           d3.select("svg").remove();
+	  var x = 1;	
           var c = document.getElementById('condition');
           var condition = c[c.selectedIndex].value;
 
