@@ -15,6 +15,9 @@ function DrawNetwork(dataset) {
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
     .attr("transform","translate(" + margin.left + "," + margin.top + ")");
+    
+ 
+  data.nodes = getUniqueListBy(data.nodes,'name');
 
   var link = svg.append("g")//define what the links will be and append them to the svg
     .append("class","links")
