@@ -35,7 +35,7 @@ function DrawNetwork(dataset) {
       
   var circle = node.append("circle")//append a circle to the node to make it visible
     .attr("r",5)
-    .attr("fill", "#03fce8")
+    .attr("fill", "#EB5E28")
     .call(d3.drag()//enables drag functionality, clicking on a circle and dragging it will move it, can make it easier to see if you want to look at a specific node
           .on("start", dragstarted)
           .on("drag", dragged)

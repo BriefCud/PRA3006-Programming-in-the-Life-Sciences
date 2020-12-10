@@ -31,6 +31,18 @@ function UpdateData(wbk_bio,condition,drug) {
             return {"source": set[max].keggid, "target": set[max].keggid};
           }
         });
+      
+    //var obj = {};
+    //
+    //var uniq_drugs = [];
+    //
+    //for ( var i=0, len=noInteract.length; i < len; i++ )
+    //  obj[noInteract[i].label_s] = noInteract[i].label_s;
+    //
+    //noInteract.pathway = new Array();
+    //  for ( var key in obj )
+    //uniq_drugs.push(obj[key]); 
+      
       //console.log(dataset);//testing purposes
         DrawNetwork(data);//call the drawNetwork function to draw the network with the sorted data
         console.log(noInteract);

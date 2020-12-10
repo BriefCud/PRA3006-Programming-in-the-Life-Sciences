@@ -13,15 +13,20 @@
         <script src="http://d3js.org/d3.v4.min.js"></script>
         <script src="draw_network.js"></script>
         <script src="get_data.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css">
     </head>
 
     <body>
-      <div class="">
-        <h1>Welcome</h1>
-        <p>The first dropdown menu is the condition the patient is suffering from, and the second is the type of drug in their system. When these are selected press the search button in order to display a network graph of the perscription drugs that might interact with the illegal drug in the patients blood.</p>
-      </div>
 
-      <div class="information">
+      <div id="intro">
+        <h1>Instructions</h1>
+        <p id="instructions">
+          The first dropdown menu is the condition the patient is suffering from, and the second is the type of drug in their system. When these are selected press the search button in order to display a network graph of the drugs that might interact with the drug in the patients blood. Below the network a table of the drugs that might not interact with the drug in the patients blood will also be displayed.
+        </p>
+      </div>
+     
+
+      <div id="information">
         <form id="patientInfo">
           <select id="condition" name="Patient Condition">
             <option value="Q81938">Pain</option>
@@ -51,7 +56,6 @@
       <script>
         document.getElementById('searchButton').onclick = function(){
           d3.select("svg").remove();
-	  var x = 1;	
           var c = document.getElementById('condition');
           var condition = c[c.selectedIndex].value;
 

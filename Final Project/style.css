@@ -1,0 +1,64 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-weight: normal;
+    font-size: 18px;
+}
+
+body{
+    background-color: #FFFCF2;
+    text-align: center;
+}
+
+h1{
+    font-size: 35px;    
+}
+
+form {
+    display: block;
+}
+
+#intro{
+    margin-top: 2%;
+    padding: 15%;
+    padding-top: 5%;
+    padding-bottom: 7%;
+}
+
+#intro h1{
+    padding-bottom: 3%;
+}
+
+#searchButton {
+    margin-top: 5%;
+    padding: 0.5%;
+    border-radius: 10px;
+    font-size: 25px;
+    background-color: #252422;
+    color: #EB5E28;
+    border: 2px solid #403D39;
+}
+
+#condition , #drug {
+    background-color: #EB5E28;
+    color: #252422;
+    padding: 0.5%;
+    border: 1px solid #403D39;
+}
+
+table {
+    border-collapse: collapse;
+    margin-left: 30%;
+    margin-bottom: 5%;
+}
+
+table tr td {
+    border: 1px solid #252422;
+    padding: 0.2%;
+}
+
+table tr:first-child {
+    background-color: #EB5E28;
+    color: #252422;
+}
+
